@@ -1,0 +1,51 @@
+from preprocessing.interface_builder import Builder
+from nltk.corpus import stopwords
+import nltk
+nltk.download('stopwords')
+from nltk.stem import WordNetLemmatizer
+nltk.download('wordnet')
+import re
+from nltk.tokenize import word_tokenize
+nltk.download('punkt_tab')
+
+class Preprocessing(Builder):
+  """
+  A class for basic text preprocessing operations including lowercasing,
+  punctuation removal, whitespace trimming, stopword removal, and lemmatization.
+  
+  Attributes:
+      corpus (pd.DataFrame): The input DataFrame containing text data.
+      lemmatizer (WordNetLemmatizer): A lemmatizer from NLTK for reducing words to their base form.
+  """
+  def __init__(self, corpus):
+    self._original_df = corpus.copy()
+    self.reset()
+    self.lemmatizer = WordNetLemmatizer()
+  
+  def reset(self):
+    self.corpus = self._original_df.copy()
+    return self
+
+  #lowercase the text
+  def build_lowercase_text(self, column):
+    text = self.corpus[column].str.lower()
+    self.corpus = list(text)
+
+  def build_remove_punctuation(self):
+    self.corpus = [re.sub(r'[^\w\s]', '', t.strip()) for t in self.corpus]
+    return self
+
+  #remove noisy words
+  def build_removing_stopwords(self):
+    stop_words = set(stopwords.words('english'))
+    self.corpus = [' '.join([word for word in sentence.split() if word not in stop_words])
+                   for sentence in self.corpus]
+    return self
+
+  #lemmatize words and return a list of lists of stringsws
+  def build_lemmatize(self):
+    self.corpus = [self.lemmatizer.lemmatize(word) for word in self.corpus]
+    return self
+
+  def getProduct(self): 
+    return self.corpus
