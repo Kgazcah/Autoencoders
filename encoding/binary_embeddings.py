@@ -7,6 +7,24 @@ class LambdaGramEmbeddings:
     def _embed_lambda_gram(self, words):
         binaries = [self.word_to_indx[word] for word in words if word in self.word_to_indx]
         return "".join(binaries)
+    
+    def binary_to_ngrams(self, binary_embedding, ngram, dictionary):
+        if not isinstance(binary_embedding, str):
+            binary_embedding = ''.join(map(str, binary_embedding.astype(int)))
+        self.binary = binary_embedding
+        n_dim = len(self.binary) // ngram
+        words = []
+        inverted_dict = {v: k for k, v in dictionary.items()}
+        for i in range(ngram):
+            start = i * n_dim
+            end = start + n_dim
+            segment = self.binary[start:end]
+            #Looking up in the dictionary
+            word = inverted_dict.get(segment, f"<UNK:{segment}>")
+            words.append(word)
+        return words
+
+
 
     def get_embeddings_df(self, lambda_grams):
         self.lambda_grams = lambda_grams

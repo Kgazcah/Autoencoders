@@ -7,11 +7,11 @@ class GettingVocabulary():
         self.vocab = None
     
     def get_vocab(self):
-        self.vocab = list(set(' '.join(self.corpus).split()))
+        self.vocab = list(sorted(set(' '.join(self.corpus).split())))
         return self.vocab
     
     def get_vocab_to_indx(self):
-        self.vocab_to_indx = {word: indx+1 for indx, word in enumerate(self.vocab)}
+        self.vocab_to_indx = {word: indx for indx, word in enumerate(self.vocab)}
         return self.vocab_to_indx
     
     def get_indx_to_vocab(self):
