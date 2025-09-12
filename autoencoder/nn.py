@@ -13,7 +13,7 @@ class Autoencoder:
         #create the nn
         self.autoencoder = tf.keras.models.Sequential()
         self.autoencoder.add(tf.keras.layers.Dense(input_neurons, input_shape=(input_size,)))
-        self.autoencoder.add(tf.keras.layers.Dropout(0.3))
+        self.autoencoder.add(tf.keras.layers.Dropout(0.3, seed=0))
         #encoder
         encoder = tf.keras.layers.Dense(embedding_size, activation=tf.nn.sigmoid)
         self.autoencoder.add(encoder)

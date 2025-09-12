@@ -167,33 +167,36 @@ n_grams.to_csv('assets/n_gram_embeddings/n_gram_words.tsv', sep="\t", index=Fals
 
 
 ##################### Step 12: Decode
+ind = 13
 decode = autoencoder.decode()
 bin_embedding = decode.predict(n_grams_embeddings)
 bin_embedding = np.round(bin_embedding, 0)
-print(f'Original Embedding: {n_grams_embeddings[2]}')
-print(f'Predicted Binary embedding: {bin_embedding[2]}')
-original_binary_embedding = n_grams_df['embedding'][2]
+# print(f'Original Embedding: {n_grams_embeddings[ind]}')
+karina_bin_predicted = str(bin_embedding[ind]).replace('[', "").replace(".","").replace(" ","").replace("]","").replace("\n","")
+print(f'Predicted Binary embedding: {karina_bin_predicted}')
+original_binary_embedding = n_grams_df['embedding'][ind]
 print(f'Original Binary embedding: {original_binary_embedding}')
-print(f'Original N-grams: {n_grams[2]}')
-print(f'Predicted N-grams:{binary_encode_decode.binary_to_ngrams(bin_embedding[2], 3, dictionary)}')
+print(f'Original N-grams: {n_grams[ind]}')
+print(f'Predicted N-grams:{binary_encode_decode.binary_to_ngrams(bin_embedding[ind], 3, dictionary)}')
 
 
 ######################## DECODING YURI'S EMBEDDINGS
 ### embeddings yuri ###############
 yuri_embeddings = pd.read_csv('assets/n_gram_embeddings/yuri_n_gram_embedding.tsv', sep='\t')
 yuri_embeddings = np.array(yuri_embeddings)
-print("YURIIIIIIIIIIIIIIIIIII")
-print(type(yuri_embeddings))
-print(yuri_embeddings)
+# print("YURIIIIIIIIIIIIIIIIIII")
+# print(type(yuri_embeddings))
+# print(yuri_embeddings)
 
 
 #####################
 decode = autoencoder.decode()
 bin_embedding = decode.predict(yuri_embeddings)
 bin_embedding = np.round(bin_embedding, 0)
-print(f'Original Embedding: {yuri_embeddings[2351]}')
-print(f'Predicted Binary embedding: {bin_embedding[2]}')
-original_binary_embedding = n_grams_df['embedding'][2]
+# print(f'Original Embedding: {yuri_embeddings[ind]}')
+yuri_bin_predicted = str(bin_embedding[ind]).replace('[', "").replace(".","").replace(" ","").replace("]","").replace("\n","")
+print(f'Predicted Binary embedding: {yuri_bin_predicted}')
+original_binary_embedding = n_grams_df['embedding'][ind]
 print(f'Original Binary embedding: {original_binary_embedding}')
-print(f'Original N-grams: {n_grams[2]}')
-print(f'Predicted N-grams:{binary_encode_decode.binary_to_ngrams(bin_embedding[2], 3, dictionary)}')
+print(f'Original N-grams: {n_grams[ind]}')
+print(f'Predicted N-grams:{binary_encode_decode.binary_to_ngrams(bin_embedding[ind], 3, dictionary)}')
