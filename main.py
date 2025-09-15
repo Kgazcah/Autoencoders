@@ -134,7 +134,7 @@ y_test = X_test
 y_val = X_val
 
 ##################### Step 8: Creating and training the Neural Network (Autoencoder)
-'''
+"""
 autoencoder = Autoencoder(X_train.shape[1], y_train.shape[1])
 history = autoencoder.fit(X_train, y_train, X_val, y_val, epochs=200, batch_size=32)
 
@@ -144,7 +144,7 @@ autoencoder.save()
 plot = Visualization()
 plot.plotting_metric(history.history, 'cosine_similarity', 'val_cosine_similarity', path='assets/learning_graphs', fig_name='Learning training')
 plot.plotting_loss(history.history, 'loss', 'val_loss', path='assets/learning_graphs', fig_name='Loss training')
-'''
+"""
 #################### Step 10: Predicting
 #comment following line if you want to train
 autoencoder = Autoencoder(X_train.shape[1], y_train.shape[1])
@@ -167,7 +167,7 @@ n_grams.to_csv('assets/n_gram_embeddings/n_gram_words.tsv', sep="\t", index=Fals
 
 
 ##################### Step 12: Decode
-ind = 13
+ind = 1
 decode = autoencoder.decode()
 bin_embedding = decode.predict(n_grams_embeddings)
 bin_embedding = np.round(bin_embedding, 0)

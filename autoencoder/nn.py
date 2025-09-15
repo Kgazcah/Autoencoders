@@ -1,6 +1,8 @@
 import tensorflow as tf
 from keras.models import Model
 from tensorflow.keras.models import load_model
+from tensorflow.keras.utils import plot_model
+
 
 
 class Autoencoder:
@@ -25,8 +27,8 @@ class Autoencoder:
         self.index_decoder_layer = self.autoencoder.layers.index(decoder)
         self.autoencoder.summary()
 
-    def fit(self, X_train, y_train, X_val, y_val, epochs=300, batch_size=256, shuffle=True):
-        self.autoencoder.compile(optimizer=self.optimizer, metrics=self.metrics,loss=self.loss)
+    def fit(self, X_train, y_train, X_val, y_val, epochs=200, batch_size=256, shuffle=False):
+        self.autoencoder.compile(optimizer=self.optimizer, metrics=self.metrics, loss=self.loss)
         # Train the nn
         history = self.autoencoder.fit(X_train, y_train,
                         epochs=epochs,
