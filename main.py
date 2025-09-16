@@ -2,16 +2,16 @@ import pandas as pd
 import numpy as np
 from nltk.tokenize import word_tokenize
 from preprocessing.interface_builder import Builder
-from preprocessing.preprocessor_builder import Preprocessing
-from preprocessing.director import Director
+from preprocess99999ng.director import Director
 from vocabulary.getting_vocabulary import GettingVocabulary
 from encoding.lambda_grams import LambdaGrams
 from encoding.lambda_grams_to_indx import LambdaGramsToIndx
 from encoding.binary_embeddings import LambdaGramEmbeddings
 from autoencoder.nn import Autoencoder
-from visualization.plotting import Visualization
+from visualization.plotting import Visualization 
+import utils
 
-df = pd.read_csv('Data/U2_EXER_W2V.csv')
+df = pd.read_csv('data/U2_EXER_W2V.csv')
 
 ####################### Step 1: Preprocessing (Builder Pattern)
 director = Director()
@@ -34,7 +34,7 @@ vocab.to_csv('assets/method/1_vocabulary.csv', index=False)
 vocab_to_index = vocab_obj.get_vocab_to_indx()
 vocab_to_index_df = pd.DataFrame(list(vocab_to_index.items()), 
                                  columns=['word', 'index'])
-vocab_to_index_df.to_csv("assets/method/2_vocab_to_index.csv", index=False)
+vocab_to_index_df.to_csv('assets/method/2_vocab_to_index.csv', index=False)
 
 # If you want to upload your own vocabulary to index, uncomment the next 3 lines.
 # The dictionary must be in the form: #{'x': 1, ..., 'yet': 1984, 'zero': 1985}
@@ -75,14 +75,14 @@ dictionary = word_to_bin
 
 # If you want to upload your own dictionary, uncomment the next 3 lines.  
 # The dictionary must be in the form: {'yet': '110000', 'zero': '100001'}
-# dictionary_df = pd.read_csv('binary_dict_karina.csv', dtype={"binary": str})
+# dictionary_df = pd.read_csv('binary_dict_karina.csv', dtype={'binary': str})
 # columns = ['word', 'binary']
 # dictionary = dictionary_df.set_index(columns[0])[columns[1]].to_dict()
 
 #to decode a binary string, uncomment the next 3 lines
 # binary_embedding_test = '111001001001100101111011011101110'
 # n_grams_in_a_binary = binary_encode_decode.binary_to_ngrams(binary_embedding_test, 3, dictionary)
-# print(f"The binary embedding {binary_embedding_test} contains the tokens {n_grams_in_a_binary}.")
+# print(f'The binary embedding {binary_embedding_test} contains the tokens {n_grams_in_a_binary}.')
 
 #saving the binary embeddings
 binary_embeddings_3 = binary_encode_decode.get_embeddings_df(lambda_grams_3)
@@ -106,19 +106,19 @@ binary_embeddings_5.to_csv('assets/bin_embeddings/binary_embeddings_5.csv', inde
 #     X_train, y_train, test_size=0.20, random_state=42)
 
 # X_train = pd.DataFrame(X_train)
-# X_train.to_csv("data/X_train.csv", index=False)
+# X_train.to_csv('data/X_train.csv', index=False)
 # y_train = pd.DataFrame(y_train)
-# y_train.to_csv("data/y_train.csv", index=False)
+# y_train.to_csv('data/y_train.csv', index=False)
 
 # X_test = pd.DataFrame(X_test)
-# X_test.to_csv("data/X_test.csv", index=False)
+# X_test.to_csv('data/X_test.csv', index=False)
 # y_test = pd.DataFrame(y_test)
-# y_test.to_csv("data/y_test.csv", index=False)
+# y_test.to_csv('data/y_test.csv', index=False)
 
 # X_val = pd.DataFrame(X_val)
-# X_val.to_csv("data/X_val.csv", index=False)
+# X_val.to_csv('data/X_val.csv', index=False)
 # y_val = pd.DataFrame(y_val)
-# y_val.to_csv("data/y_val.csv", index=False)
+# y_val.to_csv('data/y_val.csv', index=False)
 
 ####################### Step 7: Uploading the data
 
@@ -134,8 +134,9 @@ y_test = X_test
 y_val = X_val
 
 ##################### Step 8: Creating and training the Neural Network (Autoencoder)
-"""
-autoencoder = Autoencoder(X_train.shape[1], y_train.shape[1])
+
+autoencoder = Autoencoder(X_train.shape[1], y_train.shape[1], embedding_size=200)
+'''
 history = autoencoder.fit(X_train, y_train, X_val, y_val, epochs=200, batch_size=32)
 
 autoencoder.save()
@@ -144,7 +145,7 @@ autoencoder.save()
 plot = Visualization()
 plot.plotting_metric(history.history, 'cosine_similarity', 'val_cosine_similarity', path='assets/learning_graphs', fig_name='Learning training')
 plot.plotting_loss(history.history, 'loss', 'val_loss', path='assets/learning_graphs', fig_name='Loss training')
-"""
+'''
 #################### Step 10: Predicting
 #comment following line if you want to train
 autoencoder = Autoencoder(X_train.shape[1], y_train.shape[1])
@@ -159,20 +160,20 @@ print(X_test[0])
 encode = autoencoder.encode()
 n_grams_embeddings = encode.predict(X_test)
 df_embeddings = pd.DataFrame(n_grams_embeddings)
-df_embeddings.to_csv('assets/n_gram_embeddings/n_gram_embedding.tsv', sep="\t", index=False, header=False)
+df_embeddings.to_csv('assets/n_gram_embeddings/n_gram_embedding.tsv', sep='\t', index=False, header=False)
 
 n_grams_df = pd.read_csv('data/X_test.csv')
 n_grams = n_grams_df['lambda_gram']
-n_grams.to_csv('assets/n_gram_embeddings/n_gram_words.tsv', sep="\t", index=False, header=False)
+n_grams.to_csv('assets/n_gram_embeddings/n_gram_words.tsv', sep='\t', index=False, header=False)
 
 
 ##################### Step 12: Decode
-ind = 1
+ind = 2
 decode = autoencoder.decode()
 bin_embedding = decode.predict(n_grams_embeddings)
 bin_embedding = np.round(bin_embedding, 0)
-# print(f'Original Embedding: {n_grams_embeddings[ind]}')
-karina_bin_predicted = str(bin_embedding[ind]).replace('[', "").replace(".","").replace(" ","").replace("]","").replace("\n","")
+print(f'Original Embedding: {n_grams_embeddings[ind]}')
+karina_bin_predicted = str(bin_embedding[ind]).replace('[', '').replace('.','').replace(' ','').replace(']','').replace('\n','')
 print(f'Predicted Binary embedding: {karina_bin_predicted}')
 original_binary_embedding = n_grams_df['embedding'][ind]
 print(f'Original Binary embedding: {original_binary_embedding}')
@@ -182,19 +183,18 @@ print(f'Predicted N-grams:{binary_encode_decode.binary_to_ngrams(bin_embedding[i
 
 ######################## DECODING YURI'S EMBEDDINGS
 ### embeddings yuri ###############
-yuri_embeddings = pd.read_csv('assets/n_gram_embeddings/yuri_n_gram_embedding.tsv', sep='\t')
+yuri_embeddings = pd.read_csv('assets/n_gram_embeddings/yuri_n_gram_embedding.tsv', sep='\t', header=None)
 yuri_embeddings = np.array(yuri_embeddings)
-# print("YURIIIIIIIIIIIIIIIIIII")
-# print(type(yuri_embeddings))
-# print(yuri_embeddings)
-
+print('YURIIIIIIIIIIIIIIIIIII')
+print(type(yuri_embeddings))
+print(yuri_embeddings)
 
 #####################
 decode = autoencoder.decode()
 bin_embedding = decode.predict(yuri_embeddings)
 bin_embedding = np.round(bin_embedding, 0)
-# print(f'Original Embedding: {yuri_embeddings[ind]}')
-yuri_bin_predicted = str(bin_embedding[ind]).replace('[', "").replace(".","").replace(" ","").replace("]","").replace("\n","")
+print(f'Original Embedding: {yuri_embeddings[ind]}')
+yuri_bin_predicted = str(bin_embedding[ind]).replace('[', '').replace('.','').replace(' ','').replace(']','').replace('\n','')
 print(f'Predicted Binary embedding: {yuri_bin_predicted}')
 original_binary_embedding = n_grams_df['embedding'][ind]
 print(f'Original Binary embedding: {original_binary_embedding}')
