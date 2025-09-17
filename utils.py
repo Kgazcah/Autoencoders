@@ -148,3 +148,11 @@ def upload_vocab_to_binary_dictionary(file='binary_dict_karina.csv', columns=['w
 
 
 
+#to do adding this in a function to eliminate the rows with less than 3 n grams
+# df = pd.read_csv('data/sotware_requirements/dataset.csv')
+# preprocessed_df = utils.preprocessing(df, 'plus')
+# df['preprocessed'] = preprocessed_df
+# df_filtrado = df[df['preprocessed'].str.split().str.len() >= 3].reset_index(drop=True)
+# print(df_filtrado)
+# df_filtrado = df_filtrado.drop(columns=['preprocessed'])
+# df_filtrado.to_csv('assets/dataset.csv', index=False)

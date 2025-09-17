@@ -5,15 +5,16 @@ from visualization.plotting import Visualization
 import utils
 
 n_gram = '3'
-# df = pd.read_csv('data/U2_EXER_W2V.csv')
-# preprocessed_df = utils.preprocessing(df, 'plus')
-# word_to_bin, vocab_to_index = utils.get_vocab_ind_bin(preprocessed_df)
+df = pd.read_csv('data/sotware_requirements/dataset.csv')
+preprocessed_df = utils.preprocessing(df, 'plus')
+word_to_bin, vocab_to_index = utils.get_vocab_ind_bin(preprocessed_df)
 
-# l_grams = utils.get_lambda_grams(preprocessed_df, int(n_gram))
+l_grams = utils.get_lambda_grams(preprocessed_df, int(n_gram))
 
-# #getting_the_lambda_grams_to_binary_embeddings
-# utils.lambda_grams_to_binary(word_to_bin, l_grams, f'assets/bin_embeddings/{n_gram}_grams/binary_embeddings.csv')
+#getting_the_lambda_grams_to_binary_embeddings
+utils.lambda_grams_to_binary(word_to_bin, l_grams, f'assets/bin_embeddings/{n_gram}_grams/binary_embeddings.csv')
 
+exit()
 #################### Loading data to train autoencoder
 #loading training and testing data for 4_grams
 X_train = utils.upload_data_to_train(f'data/{n_gram}_grams/X_train.csv', 'embedding')
@@ -23,7 +24,7 @@ y_train, y_test, y_val = X_train, X_test, X_val
 
 dictionary = utils.upload_vocab_to_binary_dictionary(file='assets/method/vocab_to_binary.csv')
 ##################### Step 8: Creating and training the Neural Network (Autoencoder)
-"""
+
 initialize_weights_file = f'assets/weights/{n_gram}_grams/initial_weights.pkl'
 autoencoder = Autoencoder(X_train.shape[1], y_train.shape[1], embedding_size=200)
 autoencoder.save_initialize_weights(initialize_weights_file=initialize_weights_file)
@@ -54,7 +55,6 @@ df_embeddings.to_csv(f'assets/n_gram_embeddings/{n_gram}_grams/n_gram_embedding.
 n_grams_df = pd.read_csv(f'data/{n_gram}_grams/X_test.csv')
 n_grams = n_grams_df['lambda_gram']
 n_grams.to_csv(f'assets/n_gram_embeddings/{n_gram}_grams/n_gram_words.tsv', sep='\t', index=False, header=False)
-"""
 
 ##################### Step 12: Decode
 ind = 2
