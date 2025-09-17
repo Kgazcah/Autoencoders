@@ -26,9 +26,11 @@ class Autoencoder:
         self.index_last_encoder_layer = self.autoencoder.layers.index(encoder)
         self.index_decoder_layer = self.autoencoder.layers.index(decoder)
         self.autoencoder.summary()
+
+    def save_initialize_weights(self, initialize_weights_file='assets'):
         weights = self.autoencoder.get_weights()
         # Guardar en archivo
-        with open("assets/initial_weights.pkl", "wb") as f:
+        with open(initialize_weights_file, "wb") as f:
             pickle.dump(weights, f)
 
 

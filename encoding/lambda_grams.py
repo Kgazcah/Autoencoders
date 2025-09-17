@@ -11,7 +11,7 @@ class LambdaGrams():
     self.corpus = corpus
 
   #getting the unique tokens of the text
-  def get_lambda_grams(self, window_size, stride):
+  def get_lambda_grams(self, window_size, stride=1):
     tokenized_text = [sentence.split() for sentence in self.corpus]
     tokens = []
     for sentence in tokenized_text:
