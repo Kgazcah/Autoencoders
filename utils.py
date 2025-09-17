@@ -12,8 +12,8 @@ from encoding.lambda_grams_to_indx import LambdaGramsToIndx
 from encoding.binary_embeddings import LambdaGramEmbeddings
 
 #split the original dataset to train
-def split_data (df, input_folder, output_folder, test_size=0.20, random_state=42):
-    df = pd.read_csv(f'{input_folder}/{df}')
+def split_data (df_folder, output_folder, test_size=0.20, random_state=42):
+    df = pd.read_csv(df_folder)
     X_train, X_test, y_train, y_test = train_test_split(
     df, df, test_size=test_size, random_state=random_state)
 
