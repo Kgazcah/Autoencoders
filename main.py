@@ -30,7 +30,6 @@ autoencoder.save_initialize_weights(initialize_weights_file=initialize_weights_f
 history = autoencoder.fit(X_train, y_train, X_val, y_val, epochs=200, batch_size=32)
 autoencoder.save(f'assets/models/{n_gram}_grams/model_{n_gram}.h5')
 
-
 ##################### Step 9: Visualizing the training plots
 plot = Visualization()
 plot.plotting_metric(history.history, 'cosine_similarity', 'val_cosine_similarity', path=f'assets/learning_graphs/{n_gram}_grams', fig_name='Learning training')
