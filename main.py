@@ -4,15 +4,15 @@ from autoencoder.nn import Autoencoder
 from visualization.plotting import Visualization 
 import utils
 
-df = pd.read_csv('data/U2_EXER_W2V.csv')
-n_gram = '5'
-preprocessed_df = utils.preprocessing(df, 'plus')
-word_to_bin, vocab_to_index = utils.get_vocab_ind_bin(preprocessed_df)
+n_gram = '3'
+# df = pd.read_csv('data/U2_EXER_W2V.csv')
+# preprocessed_df = utils.preprocessing(df, 'plus')
+# word_to_bin, vocab_to_index = utils.get_vocab_ind_bin(preprocessed_df)
 
-l_grams = utils.get_lambda_grams(preprocessed_df, int(n_gram))
+# l_grams = utils.get_lambda_grams(preprocessed_df, int(n_gram))
 
-#getting_the_lambda_grams_to_binary_embeddings
-utils.lambda_grams_to_binary(word_to_bin, l_grams, f'assets/bin_embeddings/{n_gram}_grams/binary_embeddings.csv')
+# #getting_the_lambda_grams_to_binary_embeddings
+# utils.lambda_grams_to_binary(word_to_bin, l_grams, f'assets/bin_embeddings/{n_gram}_grams/binary_embeddings.csv')
 
 #################### Loading data to train autoencoder
 #loading training and testing data for 4_grams
@@ -28,18 +28,18 @@ initialize_weights_file = f'assets/weights/{n_gram}_grams/initial_weights.pkl'
 autoencoder = Autoencoder(X_train.shape[1], y_train.shape[1], embedding_size=200)
 autoencoder.save_initialize_weights(initialize_weights_file=initialize_weights_file)
 history = autoencoder.fit(X_train, y_train, X_val, y_val, epochs=200, batch_size=32)
-autoencoder.save(f'model_{n_gram}.h5')
+autoencoder.save(f'assets/models/{n_gram}_grams/model_{n_gram}.h5')
 
 
 ##################### Step 9: Visualizing the training plots
 plot = Visualization()
 plot.plotting_metric(history.history, 'cosine_similarity', 'val_cosine_similarity', path=f'assets/learning_graphs/{n_gram}_grams', fig_name='Learning training')
 plot.plotting_loss(history.history, 'loss', 'val_loss', path=f'assets/learning_graphs/{n_gram}_grams', fig_name='Loss training')
-"""
+
 #################### Step 10: Predicting
 #comment following line if you want to predict
 autoencoder = Autoencoder(X_train.shape[1], y_train.shape[1])
-model = autoencoder.load_model(f'model_{n_gram}.h5')
+model = autoencoder.load_model(f'assets/models/{n_gram}_grams/model_{n_gram}.h5')
 y_pred = model.predict(X_test)
 y_pred = y_pred.round(0)
 print(y_pred[0])
@@ -55,38 +55,38 @@ df_embeddings.to_csv(f'assets/n_gram_embeddings/{n_gram}_grams/n_gram_embedding.
 n_grams_df = pd.read_csv(f'data/{n_gram}_grams/X_test.csv')
 n_grams = n_grams_df['lambda_gram']
 n_grams.to_csv(f'assets/n_gram_embeddings/{n_gram}_grams/n_gram_words.tsv', sep='\t', index=False, header=False)
-
+"""
 
 ##################### Step 12: Decode
 ind = 2
+n_grams_df = pd.read_csv(f'data/{n_gram}_grams/X_test.csv')
+n_grams = n_grams_df['lambda_gram']
+n_grams_embeddings = np.loadtxt(f'assets/n_gram_embeddings/{n_gram}_grams/n_gram_embedding.tsv', delimiter='\t')
+
+autoencoder = Autoencoder(X_train.shape[1], y_train.shape[1])
+model= autoencoder.load_model(f'assets/models/{n_gram}_grams/model_{n_gram}.h5')
 decode = autoencoder.decode()
+
 bin_embedding = decode.predict(n_grams_embeddings)
 bin_embedding = np.round(bin_embedding, 0)
-print(f'Original Embedding: {n_grams_embeddings[ind]}')
-karina_bin_predicted = str(bin_embedding[ind]).replace('[', '').replace('.','').replace(' ','').replace(']','').replace('\n','')
-print(f'Predicted Binary embedding: {karina_bin_predicted}')
+# print(f'Original Embedding: {n_grams_embeddings[ind]}')
 original_binary_embedding = n_grams_df['embedding'][ind]
-print(f'Original Binary embedding: {original_binary_embedding}')
-print(f'Original N-grams: {n_grams[ind]}')
-print(f'Predicted N-grams:{utils.binary_to_ngrams(bin_embedding, ind, int(n_gram), dictionary)}')
-exit()
+print(f'Kari: Original Binary embedding: {original_binary_embedding}')
+karina_bin_predicted = str(bin_embedding[ind]).replace('[', '').replace('.','').replace(' ','').replace(']','').replace('\n','')
+print(f'Kari: Predicted Binary embedding: {karina_bin_predicted}')
+print(f'Kari: Original N-grams: {n_grams[ind]}')
+print(f'Kari: Predicted N-grams:{utils.binary_to_ngrams(bin_embedding, ind, int(n_gram), dictionary)}')
+
 
 ######################## DECODING YURI'S EMBEDDINGS
 ### embeddings yuri ###############
-yuri_embeddings = pd.read_csv('assets/n_gram_embeddings/yuri_n_gram_embedding.tsv', sep='\t', header=None)
-yuri_embeddings = np.array(yuri_embeddings)
-print('YURIIIIIIIIIIIIIIIIIII')
-print(type(yuri_embeddings))
-print(yuri_embeddings)
-
-#####################
-decode = autoencoder.decode()
+yuri_embeddings = np.loadtxt(f'assets/n_gram_embeddings/{n_gram}_grams/n_gram_embedding.tsv', delimiter='\t')
 bin_embedding = decode.predict(yuri_embeddings)
 bin_embedding = np.round(bin_embedding, 0)
-print(f'Original Embedding: {yuri_embeddings[ind]}')
-yuri_bin_predicted = str(bin_embedding[ind]).replace('[', '').replace('.','').replace(' ','').replace(']','').replace('\n','')
-print(f'Predicted Binary embedding: {yuri_bin_predicted}')
+# print(f'Original Embedding: {yuri_embeddings[ind]}')
 original_binary_embedding = n_grams_df['embedding'][ind]
-print(f'Original Binary embedding: {original_binary_embedding}')
-print(f'Original N-grams: {n_grams[ind]}')
-print(f'Predicted N-grams:{binary_encode_decode.binary_to_ngrams(bin_embedding[ind], 3, dictionary)}')
+print(f'Yuri: Original Binary embedding: {original_binary_embedding}')
+yuri_bin_predicted = str(bin_embedding[ind]).replace('[', '').replace('.','').replace(' ','').replace(']','').replace('\n','')
+print(f'Yuri: Predicted Binary embedding: {yuri_bin_predicted}')
+print(f'Yuri: Original N-grams: {n_grams[ind]}')
+print(f'Yuri: Predicted N-grams:{utils.binary_to_ngrams(bin_embedding, ind, int(n_gram), dictionary)}')
