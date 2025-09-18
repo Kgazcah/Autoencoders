@@ -42,13 +42,12 @@ plot.plotting_metric(history.history, 'cosine_similarity', 'val_cosine_similarit
 plot.plotting_loss(history.history, 'loss', 'val_loss', path=f'assets/learning_graphs/{problem}/{n_gram}_grams', fig_name='Loss training')
 
 #################### Step 10: Predicting
-#comment following line if you want to predict
+#comment following line if you do not want to predict
 autoencoder = Autoencoder(X_train.shape[1], y_train.shape[1])
 model = autoencoder.load_model(f'assets/models/{problem}/{n_gram}_grams/model_{n_gram}.h5')
 y_pred = model.predict(X_test)
 y_pred = y_pred.round(0)
-print(y_pred[0])
-print(X_test[0])
+
 
 #################### Step 11: Encode
 

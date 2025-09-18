@@ -76,11 +76,14 @@ def get_vocab_ind_bin(preprocessed_df, output_file='assets/method'):
     return vocab_to_binary, vocab_to_index
 
 #Getting lambda grams
-def get_lambda_grams(preprocessed_df, n_gram):
+def get_lambda_grams(preprocessed_df, n_gram, classify=False):
     n_grams = LambdaGrams(preprocessed_df)
-    #for 3 gram example we will have something as follows: 
-    #  ['carried distributed manner']
-    lambda_grams = n_grams.get_lambda_grams(n_gram)
+    if classify:
+        lambda_grams = n_grams.get_lambda_grams_for_classify(n_gram)
+    else:
+        #for 3 gram example we will have something as follows: 
+        #  ['carried distributed manner']
+        lambda_grams = n_grams.get_lambda_grams(n_gram)
     return lambda_grams
 
 # Lambda grams to indexes
@@ -94,13 +97,19 @@ def lambda_grams_to_indexes(lambda_grams, vocab_to_index):
 
 
 #Encoding the lambda grams
-def lambda_grams_to_binary(vocab_to_binary, lambda_grams, output_file_name):
+def lambda_grams_to_binary(vocab_to_binary, lambda_grams, output_file_name, fun=1):
     binary_encode_decode = LambdaGramEmbeddings(vocab_to_binary)
     dictionary = vocab_to_binary
     #saving the binary embeddings
-    binary_lambda_grams = binary_encode_decode.get_embeddings_df(lambda_grams)
+    binary_lambda_grams = binary_encode_decode.get_embeddings_df(lambda_grams, fun=fun)
     binary_lambda_grams.to_csv(output_file_name, index=False)
     return dictionary
+
+def lambda_grams_to_binary_for_classify(vocab_to_binary, lambda_grams):
+    binary_encode_decode = LambdaGramEmbeddings(vocab_to_binary)
+    binary_lambda_grams = binary_encode_decode.get_embeddings_df_to_classify(lambda_grams)
+    return binary_lambda_grams
+    
 
 def binary_to_ngrams(binary_embedding, ind, n_gram, vocab_to_binary):
     binary_encode_decode = LambdaGramEmbeddings(vocab_to_binary)
@@ -111,12 +120,17 @@ def upload_data_to_train(file_name, column):
     df = pd.read_csv(file_name)
     return np.vstack(df[column].apply(lambda x: np.array(list(x), dtype=int)).values)
 
-
 def upload_vocab_to_binary_dictionary(file='binary_dict_karina.csv', columns=['word', 'binary']):
     # The dictionary must be in the form: {'yet': '110000', 'zero': '100001'}
     df = pd.read_csv(file, dtype={'binary': str})
     dictionary = df.set_index(columns[0])[columns[1]].to_dict()
     return dictionary
+
+def generate_document_embeddings(n_grams, embeddings, sentences):
+    pass
+
+
+
 
 # to do: adding the following as a function
 
@@ -156,3 +170,5 @@ def upload_vocab_to_binary_dictionary(file='binary_dict_karina.csv', columns=['w
 # print(df_filtrado)
 # df_filtrado = df_filtrado.drop(columns=['preprocessed'])
 # df_filtrado.to_csv('assets/dataset.csv', index=False)
+
+#to do: integrate embedding function in utils
