@@ -5,10 +5,10 @@ from visualization.plotting import Visualization
 import utils
 
 n_gram = '5'
-problem = 'software_requirements'
+problem = 'software_requirements/stopwords'
 df = pd.read_csv(f'data/{problem}/dataset.csv')
 # preprocessing the dataset
-preprocessed_df = utils.preprocessing(df, 'plus')
+preprocessed_df = utils.preprocessing(df, 'basic')
 #getting the vocabulary, vocab_to_index and vocab_to_binary
 word_to_bin, vocab_to_index = utils.get_vocab_ind_bin(preprocessed_df, output_file=f'assets/method/{problem}')
 

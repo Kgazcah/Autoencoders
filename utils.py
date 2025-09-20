@@ -97,7 +97,7 @@ def lambda_grams_to_indexes(lambda_grams, vocab_to_index):
 
 
 #Encoding the lambda grams
-def lambda_grams_to_binary(vocab_to_binary, lambda_grams, output_file_name, fun=1):
+def lambda_grams_to_binary(vocab_to_binary, lambda_grams, output_file_name, fun=0):
     binary_encode_decode = LambdaGramEmbeddings(vocab_to_binary)
     dictionary = vocab_to_binary
     #saving the binary embeddings

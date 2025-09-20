@@ -4,15 +4,17 @@ from autoencoder.nn import Autoencoder
 import utils
 import ast
 
+
+
 n_gram = '5'
-binary_embedding_size = 11*int(n_gram)
-problem = 'software_requirements'
+binary_embedding_size = 12*int(n_gram)
+problem = 'software_requirements/stopwords'
 
 df = pd.read_csv(f'data/{problem}/dataset_ngrams.csv')
 
 ######################## Adding the lambda grams
 # preprocessing the dataset
-preprocessed_df = utils.preprocessing(df, 'plus')
+preprocessed_df = utils.preprocessing(df, 'basic')
 #construct the lambda grams for each sentence
 l_grams = utils.get_lambda_grams(preprocessed_df, int(n_gram), classify=True)
 
@@ -22,14 +24,15 @@ df[f'{n_gram}_grams'] = l_grams_df
 print(df.head())
 df.to_csv(f'data/{problem}/dataset_ngrams.csv', index=False)
 
-######################## Adding binary to the lambda grams
+######################## Adding lambda grams to binary representations 
 
 l_grams = df[f'{n_gram}_grams'].to_list()
 dictionary = utils.upload_vocab_to_binary_dictionary(file=f'assets/method/{problem}/vocab_to_binary.csv')
 
 sentence_binary_embeddings = []
 for lg in l_grams:
-    lg = ast.literal_eval(lg)
+    if isinstance(lg, str):
+        lg = ast.literal_eval(lg)
     binary_embeddings = utils.lambda_grams_to_binary_for_classify(dictionary, lg)
     sentence_binary_embeddings.append(binary_embeddings)
 
@@ -53,7 +56,10 @@ embedding_dim = 200
 sentences_embeddings = []
 
 for bg in bin_grams:
-    bg_list = ast.literal_eval(bg)
+    if isinstance(lg, str):
+        bg_list = ast.literal_eval(bg)
+    else:
+        bg_list = bg
 
     if len(bg_list) == 0:
         # if empty generate an embedding (200dim)
@@ -78,7 +84,7 @@ embeddings_df = pd.DataFrame({f'{n_gram}_gram_embeddings': sentences_embeddings}
 print(embeddings_df)
 df[f'{n_gram}_gram_embeddings'] = embeddings_df
 df.to_csv(f'data/{problem}/dataset_ngrams.csv', index=False)
-
+exit()
 
 ############################ Adding my embeddings to yuri's embeddings
 
