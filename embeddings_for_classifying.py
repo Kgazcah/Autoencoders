@@ -14,7 +14,10 @@ df = pd.read_csv(f'data/{problem}/dataset_ngrams.csv')
 
 ######################## Adding the lambda grams
 # preprocessing the dataset
-preprocessed_df = utils.preprocessing(df, 'basic')
+if problem.split('/')[1] == 'stopwords':
+    preprocessed_df = utils.preprocessing(df, 'basic')
+else:
+    preprocessed_df = utils.preprocessing(df, 'plus')
 #construct the lambda grams for each sentence
 l_grams = utils.get_lambda_grams(preprocessed_df, int(n_gram), classify=True)
 

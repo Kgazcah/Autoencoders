@@ -5,13 +5,16 @@ from visualization.plotting import Visualization
 import utils
 
 n_gram = '5'
-problem = 'software_requirements/stopwords'
-df = pd.read_csv(f'data/{problem}/dataset.csv')
-# preprocessing the dataset
-preprocessed_df = utils.preprocessing(df, 'basic')
-#getting the vocabulary, vocab_to_index and vocab_to_binary
-word_to_bin, vocab_to_index = utils.get_vocab_ind_bin(preprocessed_df, output_file=f'assets/method/{problem}')
+problem = 'emotions/stopwords'
+df = pd.read_csv(f'data/{problem}/dataset_emotions.txt', sep='\t')
 
+# preprocessing the dataset
+if problem.split('/')[1] == 'stopwords':
+    preprocessed_df = utils.preprocessing(df, 'basic')
+else:
+    preprocessed_df = utils.preprocessing(df, 'plus')
+#getting the vocabulary, vocab_to_index and vocab_to_binary
+word_to_bin, vocab_to_index, bits = utils.get_vocab_ind_bin(preprocessed_df, output_file=f'assets/method/{problem}')
 l_grams = utils.get_lambda_grams(preprocessed_df, int(n_gram))
 
 #getting the lambda grams to binary embeddings
@@ -80,6 +83,7 @@ print(f'Kari: Predicted Binary embedding: {karina_bin_predicted}')
 print(f'Kari: Original N-grams: {n_grams[ind]}')
 print(f'Kari: Predicted N-grams:{utils.binary_to_ngrams(bin_embedding, ind, int(n_gram), dictionary)}')
 
+print(f'{n_gram}-grams: For {problem} problem {bits} bits are required')
 exit()
 ######################## DECODING YURI'S EMBEDDINGS
 ### embeddings yuri ###############

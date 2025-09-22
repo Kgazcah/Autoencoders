@@ -26,4 +26,4 @@ class GettingVocabulary():
         vocab_to_bin = {word: format(idx, f'0{bits}b') for word, idx in self.vocab_to_indx.items()}
         # bin_to_word = {v: k for k, v in vocab_to_bin.items()}
     
-        return vocab_to_bin #, bin_to_word, bits
+        return vocab_to_bin , bits #, bin_to_word

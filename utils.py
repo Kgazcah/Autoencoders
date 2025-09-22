@@ -47,7 +47,6 @@ def preprocessing(df, type):
 #Getting the vocabulary and their indexes
 def get_vocab_ind_bin(preprocessed_df, output_file='assets/method'):
     vocab_obj = GettingVocabulary(preprocessed_df)
-    # get vocabulary (unique words) with stopwords 2093 and without stopwords 1986
     vocabulary = vocab_obj.get_vocab()
     vocab = pd.DataFrame(vocabulary)
     vocab.to_csv(f'{output_file}/vocabulary.csv', index=False)
@@ -67,13 +66,13 @@ def get_vocab_ind_bin(preprocessed_df, output_file='assets/method'):
     # vocab_to_index = vocab_to_index_df.set_index(columns[0])[columns[1]].to_dict()
 
     #get the binary embedding from the decimal indexes
-    vocab_to_binary = vocab_obj.get_binary_rep(vocab_to_index)
+    vocab_to_binary, bits = vocab_obj.get_binary_rep(vocab_to_index)
 
     #the embedding binary dictionary has the following example form:
     # {'yet': '110000',..., 'zero': '100001'}
     binary_dic = pd.DataFrame(list(vocab_to_binary.items()), columns=['word', 'binary'])
     binary_dic.to_csv(f'{output_file}/vocab_to_binary.csv', index=False)
-    return vocab_to_binary, vocab_to_index
+    return vocab_to_binary, vocab_to_index, bits
 
 #Getting lambda grams
 def get_lambda_grams(preprocessed_df, n_gram, classify=False):

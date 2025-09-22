@@ -7,7 +7,6 @@ class LambdaGramsToIndx():
     def get_lambda_grams_indx(self):
         result = {}
         for lg in self.lambda_grams:
-            # si es una lista con una sola cadena, separamos en palabras
             if len(lg) == 1 and isinstance(lg[0], str):
                 words = lg[0].split()
             else:
