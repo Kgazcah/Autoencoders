@@ -5,7 +5,7 @@ from visualization.plotting import Visualization
 import utils
 
 n_gram = '5'
-problem = 'emotions/stopwords'
+problem = 'emotions/no_stopwords'
 df = pd.read_csv(f'data/{problem}/dataset_emotions.txt', sep='\t')
 
 # preprocessing the dataset

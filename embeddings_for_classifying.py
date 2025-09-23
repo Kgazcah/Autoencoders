@@ -5,10 +5,9 @@ import utils
 import ast
 
 
-
 n_gram = '5'
-binary_embedding_size = 12*int(n_gram)
-problem = 'software_requirements/stopwords'
+binary_embedding_size = 14*int(n_gram)
+problem = 'emotions/no_stopwords'
 
 df = pd.read_csv(f'data/{problem}/dataset_ngrams.csv')
 
@@ -26,7 +25,6 @@ l_grams_df = pd.DataFrame({'n_grams': l_grams})
 df[f'{n_gram}_grams'] = l_grams_df
 print(df.head())
 df.to_csv(f'data/{problem}/dataset_ngrams.csv', index=False)
-
 ######################## Adding lambda grams to binary representations 
 
 l_grams = df[f'{n_gram}_grams'].to_list()
