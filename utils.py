@@ -12,8 +12,8 @@ from encoding.lambda_grams_to_indx import LambdaGramsToIndx
 from encoding.binary_embeddings import LambdaGramEmbeddings
 
 #split the original dataset to train
-def split_data (df_folder, output_folder, test_size=0.20, random_state=42):
-    df = pd.read_csv(df_folder)
+def split_data (df_folder, output_folder, test_size=0.20, random_state=42, column='embedding'):
+    df = pd.read_csv(df_folder, dtype={column: str})
     X_train, X_test, y_train, y_test = train_test_split(
     df, df, test_size=test_size, random_state=random_state)
 
@@ -114,10 +114,11 @@ def binary_to_ngrams(binary_embedding, ind, n_gram, vocab_to_binary):
     binary_encode_decode = LambdaGramEmbeddings(vocab_to_binary)
     return binary_encode_decode.binary_to_ngrams(binary_embedding[ind], n_gram, vocab_to_binary)
 
+
 #Uploading the data
 def upload_data_to_train(file_name, column):
-    df = pd.read_csv(file_name)
-    return np.vstack(df[column].apply(lambda x: np.array(list(x), dtype=int)).values)
+    df = pd.read_csv(file_name, dtype={"embedding": str})
+    return np.vstack(df[column].apply(lambda x: np.array(list(x), dtype=float)).values)
 
 def upload_vocab_to_binary_dictionary(file='binary_dict_karina.csv', columns=['word', 'binary']):
     # The dictionary must be in the form: {'yet': '110000', 'zero': '100001'}

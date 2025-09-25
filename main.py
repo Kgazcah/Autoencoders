@@ -4,9 +4,9 @@ from autoencoder.nn import Autoencoder
 from visualization.plotting import Visualization 
 import utils
 
-n_gram = '5'
-problem = 'emotions/no_stopwords'
-df = pd.read_csv(f'data/{problem}/dataset_emotions.txt', sep='\t')
+n_gram = '1'
+problem = 'software_requirements/no_stopwords'
+df = pd.read_csv(f'data/{problem}/dataset.csv')
 
 # preprocessing the dataset
 if problem.split('/')[1] == 'stopwords':

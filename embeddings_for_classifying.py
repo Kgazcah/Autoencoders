@@ -5,9 +5,9 @@ import utils
 import ast
 
 
-n_gram = '5'
-binary_embedding_size = 14*int(n_gram)
-problem = 'emotions/no_stopwords'
+n_gram = '1'
+binary_embedding_size = 11*int(n_gram)
+problem = 'software_requirements/no_stopwords'
 
 df = pd.read_csv(f'data/{problem}/dataset_ngrams.csv')
 
