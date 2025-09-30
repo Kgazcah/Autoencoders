@@ -4,15 +4,16 @@ from autoencoder.nn import Autoencoder
 from visualization.plotting import Visualization 
 import utils
 
-n_gram = '1'
-problem = 'software_requirements/no_stopwords'
-df = pd.read_csv(f'data/{problem}/dataset.csv')
+n_gram = '5'
+problem = 'tales/no_stopwords'
+df = pd.read_csv(f'data/{problem}/sentences.csv')
 
 # preprocessing the dataset
 if problem.split('/')[1] == 'stopwords':
-    preprocessed_df = utils.preprocessing(df, 'basic')
+    preprocessed_df = utils.preprocessing(df, 'basic', 'es')
 else:
-    preprocessed_df = utils.preprocessing(df, 'plus')
+    preprocessed_df = utils.preprocessing(df, 'plus', 'es')
+
 #getting the vocabulary, vocab_to_index and vocab_to_binary
 word_to_bin, vocab_to_index, bits = utils.get_vocab_ind_bin(preprocessed_df, output_file=f'assets/method/{problem}')
 l_grams = utils.get_lambda_grams(preprocessed_df, int(n_gram))

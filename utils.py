@@ -31,15 +31,15 @@ def split_data (df_folder, output_folder, test_size=0.20, random_state=42, colum
     X_val.to_csv(f'{output_folder}/X_val.csv', index=False)
 
 #preprocessing the corpus (Builder Pattern)
-def preprocessing(df, type):
+def preprocessing(df, type, language='en'):
     director = Director()
     builder = Preprocessing(df)
     if type == 'basic':
         #basic builder includes stopwords
-        preprocessed_df = director.makeBasicPreprocessing(builder)
+        preprocessed_df = director.makeBasicPreprocessing(builder, language)
     elif type == 'plus':
         #plus builder does not include stopwords
-        preprocessed_df = director.makePlusPreprocessing(builder)
+        preprocessed_df = director.makePlusPreprocessing(builder, language)
     return preprocessed_df
 
 
