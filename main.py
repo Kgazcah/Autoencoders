@@ -4,7 +4,7 @@ from autoencoder.nn import Autoencoder
 from visualization.plotting import Visualization 
 import utils
 
-n_gram = '5'
+n_gram = '1'
 problem = 'tales/no_stopwords'
 df = pd.read_csv(f'data/{problem}/sentences.csv')
 

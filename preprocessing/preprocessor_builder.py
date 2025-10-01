@@ -46,7 +46,7 @@ class Preprocessing(Builder):
                    for sentence in self.corpus]
     return self
 
-  #lemmatize words and return a list of lists of stringsws
+  #lemmatize words and return a list of lists of strings
   def build_lemmatize(self, language):
     if language == 'en':
       self.corpus = [self.lemmatizer.lemmatize(word) for word in self.corpus]
